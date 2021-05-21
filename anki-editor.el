@@ -112,7 +112,7 @@ See https://apps.ankiweb.net/docs/manual.html#latex-conflicts.")
   "8765"
   "The port number AnkiConnect is listening.")
 
-(defcustom anki-editor-use-math-jax nil
+(defcustom anki-editor-use-math-jax t
   "Use Anki's built in MathJax support instead of LaTeX.")
 
 ;;; AnkiConnect
@@ -233,14 +233,14 @@ The result is the path to the newly stored media file."
 
 (defun anki-editor--translate-latex-delimiters (latex-code)
   (catch 'done
-    (let ((delimiter-map (list (list (cons (format "^%s" (regexp-quote "$$")) "[$$]")
-                                     (cons (format "%s$" (regexp-quote "$$")) "[/$$]"))
-                               (list (cons (format "^%s" (regexp-quote "$")) "[$]")
-                                     (cons (format "%s$" (regexp-quote "$")) "[/$]"))
-                               (list (cons (format "^%s" (regexp-quote "\\(")) "[$]")
-                                     (cons (format "%s$" (regexp-quote "\\)")) "[/$]"))
-                               (list (cons (format "^%s" (regexp-quote "\\[")) "[$$]")
-                                     (cons (format "%s$" (regexp-quote "\\]")) "[/$$]"))))
+    (let ((delimiter-map (list (list (cons (format "^%s" (regexp-quote "$$")) "\\[")
+                                     (cons (format "%s$" (regexp-quote "$$")) "\\]"))
+                               (list (cons (format "^%s" (regexp-quote "$")) "\\(")
+                                     (cons (format "%s$" (regexp-quote "$")) "\\)"))
+                               (list (cons (format "^%s" (regexp-quote "\\(")) "\\(")
+                                     (cons (format "%s$" (regexp-quote "\\)")) "\\)"))
+                               (list (cons (format "^%s" (regexp-quote "\\[")) "\\[")
+                                     (cons (format "%s$" (regexp-quote "\\]")) "\\]"))))
           (matched nil))
       (save-match-data
         (dolist (pair delimiter-map)
